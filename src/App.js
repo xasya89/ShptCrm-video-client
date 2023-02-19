@@ -1,25 +1,82 @@
+import React, { Component, useReducer, useContext } from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+} from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
+import ActChoosePage from './pages/ActChoosePage';
+import IndexPage from './pages/IndexPage';
+import { ActChooseContext, actChooseinitialState, actChooseReducer } from './ChooseActReducer';
+import StartRecordPage from './pages/StartRecordPage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const askPermission = () => {
+  return new Promise(function (resolve, reject) {
+    const permissionResult = Notification.requestPermission(function (result) {
+      resolve(result);
+    });
+
+    if (permissionResult) {
+      permissionResult.then(resolve, reject);
+    }
+  }).then(function (permissionResult) {
+    if (permissionResult !== 'granted') {
+      throw new Error("We weren't granted permission.");
+    }
+  });
 }
+
+const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <div>
+          <IndexPage />
+      </div>,
+    },
+    {
+      path: "/actchoose",
+      element:  <div>
+          <ActChoosePage />
+        </div>,
+    },
+    {
+      path: "/startrecord",
+      element:  <div>
+          <StartRecordPage />
+        </div>,
+    },
+    {
+      path: "/startrecord/:actId",
+      element:  <div>
+          <StartRecordPage />
+        </div>,
+    },
+  ])
+
+
+class App extends Component {
+  render() {
+    return (
+        <RouterProvider router={router} />
+    );
+  }
+}
+
+
+
+/*
+const App = () => {
+  let {state, dispatch} = useContext(ActChooseContext);
+    return (
+      <ActChooseContext.Provider value={{dispatch, state}}>
+        <RouterProvider router={router} />
+      </ActChooseContext.Provider>
+        
+    );
+}
+*/
+
 
 export default App;

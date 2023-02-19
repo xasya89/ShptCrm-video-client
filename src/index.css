@@ -1,13 +1,23 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply rounded-md  text-white py-1 px-3
+}
+.btn-info {
+    @apply bg-info
+}
+.btn-danger {
+    @apply bg-danger
+}
+.card {
+    @apply rounded-lg shadow-md p-3 m-2 grid grid-cols-2 grid-flow-row gap-4 bg-white
+}
+.card-vertical {
+    @apply rounded-lg shadow-md p-3 m-2 grid grid-cols-1 grid-flow-row gap-4 bg-white
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+    @apply bg-slate-100
 }
