@@ -1,0 +1,40 @@
+.main{
+    height: 50vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    @media screen {
+        @media (min-width: 1024px) {
+            height: 200px;
+        }
+    }
+}
+
+.window{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.allPagesContainer{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    transition: .2s ease-in-out;
+    img{
+        height: 100%;
+        width: auto;
+    }
+}
+
+.arrowButton{
+    width: 10vw;
+    /* eight: "100%", left:"0px", position: "absolute", display: "flex", justifyContent: "center" */
+    z-index: 999;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    background-color: rgba($color: #fff, $alpha: .5);
+}

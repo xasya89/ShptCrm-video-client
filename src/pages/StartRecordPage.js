@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import $api from "../features/api";
 
 function camSelected(cams, setCams, devId){
     let pos = cams.indexOf(devId);
@@ -11,54 +12,52 @@ function camSelected(cams, setCams, devId){
     setCams([...cams]);
 }
 
-function startRecord(actId, cams){
-    axios.post("https://172.172.172.45:7036/api/video/record", {
-        actId: actId, cams: cams
-    },{
-        headers: {'Access-Control-Allow-Origin': "*"},
-        mode: 'cors',
-    })
-    .then(function (resp){
-        window.location.href="/";
-
-    })
-    .catch(function (error){
-        console.error(error);
-    })
-}
 
 const StartRecordPage = () => {
+    const navigate = useNavigate();
     let {actId} = useParams();
     let [cams, setCams] = useState([]);
     let [choosedAct, setChoosedAct] = useState(null);
     let [chooseCams, setChooseCams] = useState([]);
 
     useEffect(() => {
-        axios.get("https://172.172.172.45:7036/api/video/CameraStatus" ,{
-            headers: {'Access-Control-Allow-Origin': "*"},
-            mode: 'cors',
-        })
-        .then(function (resp){
-            setCams(resp.data);
-
-        })
-        .catch(function (error){
-            console.error(error);
-        })
+        const select = async () => {
+            try{
+                const resp = await $api.get("/video/CameraStatus");
+                setCams(resp.data);
+            }
+            catch(e){
+                console.error(e);
+            }
+        };
+        select();
     }, [])
 
     useEffect(() => {
-        axios.get("https://172.172.172.45:7036/api/general/ActList/"+actId ,{
-            headers: {'Access-Control-Allow-Origin': "*"},
-            mode: 'cors',
-        })
-        .then(function (resp){
-            setChoosedAct(resp.data);
-        })
-        .catch(function (error){
-            console.error(error);
-        })
-    }, actId);
+        const select = async () => {
+            try{
+                const resp = await $api.get("/general/ActList/"+actId);
+                setChoosedAct(resp.data);
+            }
+            catch(e){
+                console.error(e);
+            }
+        }
+        select();
+    }, [actId]);
+
+    const startRecord = async () => {
+        try{
+            const resp = await $api.post("/video/record", {
+                actId: actId, cams: chooseCams
+            });
+            setTimeout(()=> navigate("/recordlist"), 1_000);
+        }
+        catch(e){
+            console.error(e);
+        }
+
+    }
 
     let _actNote = <div></div>
     if(choosedAct!=null)
@@ -87,7 +86,7 @@ const StartRecordPage = () => {
                 <h2 className="text-xl">2 - Выберите камеры: </h2>
             </div>
                 {cams.map(cam => {
-                    let _src = `http://localhost:8090/video.mjpg?oids=${cam.devId}&size=640x480`;
+                    let _src = `${process.env.REACT_APP_DVR_HOST}/video.mjpg?oids=${cam.devId}&size=640x480`;
                     let _camSelected = <div></div>;
                     if(chooseCams.indexOf(cam.devId) > -1)
                         _camSelected = <div className="absolute  w-full h-full top-0 left-0 bg-greenopacity opacity-40"></div>;
@@ -99,7 +98,7 @@ const StartRecordPage = () => {
                     return <div></div>
                 })}
         </div>
-        <div className="card text-center">
+        <div className="card text-center" style={{marginBottom: "100px"}}>
             <button onClick={()=>startRecord(choosedAct.id, chooseCams)} className="btn btn-info">Начать запись</button>
         </div>
     </div>

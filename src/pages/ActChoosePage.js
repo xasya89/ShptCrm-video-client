@@ -1,32 +1,21 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-/*
-const getActList = () =>{
-    axios.get("https://localhost:7036/api/general/ActList")
-    .then(function (resp){
-        
-        console.log(resp);
-    })
-    .catch(function (error){
-        console.error(error);
-    })
-}
-*/
+import $api from "../features/api";
 
 const ActChoosePage = () => {
     const [actlist, setActList] = useState([]);
     useEffect(() => {
-        axios.get("http://172.172.172.45:5036/api/general/ActList" ,{
-            headers: {'Access-Control-Allow-Origin': "*"},
-            mode: 'cors',
-        })
-        .then(function (resp){
-            setActList(resp.data);
-        })
-        .catch(function (error){
-            console.error(error);
-        })
+        const selectList = async () => {
+            try{
+                const resp = await $api.get("/general/ActList");
+                setActList(resp.data);
+            }
+            catch(e){
+                console.error(e);
+            }
+        }
+        selectList();
     }, []);
     
     return <div className="">

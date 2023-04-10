@@ -7,9 +7,11 @@ import {
 import logo from './logo.svg';
 import './App.css';
 import ActChoosePage from './pages/ActChoosePage';
-import IndexPage from './pages/IndexPage';
 import { ActChooseContext, actChooseinitialState, actChooseReducer } from './ChooseActReducer';
 import StartRecordPage from './pages/StartRecordPage';
+import CamRecordListPage from './pages/CamListPage';
+import HomePage from './pages/HomePage';
+import IndexPage from './pages/IndexPage';
 
 
 const askPermission = () => {
@@ -31,27 +33,35 @@ const askPermission = () => {
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <div>
-          <IndexPage />
-      </div>,
-    },
-    {
-      path: "/actchoose",
-      element:  <div>
-          <ActChoosePage />
-        </div>,
-    },
-    {
-      path: "/startrecord",
-      element:  <div>
-          <StartRecordPage />
-        </div>,
-    },
-    {
-      path: "/startrecord/:actId",
-      element:  <div>
-          <StartRecordPage />
-        </div>,
+      element: <IndexPage />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />
+        },
+        {
+          path: "recordlist",
+          element: <div><CamRecordListPage /></div>
+        },
+        {
+          path: "actchoose",
+          element:  <div>
+              <ActChoosePage />
+            </div>,
+        },
+        {
+          path: "startrecord",
+          element:  <div>
+              <StartRecordPage />
+            </div>,
+        },
+        {
+          path: "startrecord/:actId",
+          element:  <div>
+              <StartRecordPage />
+            </div>,
+        },
+      ]
     },
   ])
 
