@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from "react";
-import axios from 'axios';
 import $api from "../features/api";
-import VideoSlider from "../components/slider/Slider";
 import { Link } from "react-router-dom";
 
 async function selectCamStatuses(setStateCams){
@@ -33,18 +31,12 @@ const HomePage = () => {
         selectCamStatuses(setStateCams);
     }, [])
     return <div>
-        <div>
-            <VideoSlider>
-                {cams.map(cam => <div key={cam.devId} className='item'>
-                <img src={`${process.env.REACT_APP_DVR_HOST}/video.mjpg?oids=${cam.devId}&size=1027x768`} draggable={false} />
-                <div>{cam.isRecord && <>Идет запись</>}</div>
-                </div> )}
-            </VideoSlider>
-        </div>
         <ul className="text-center p-2">
             <li><Link to="/startrecord" className="btn btn-info">Начать запись</Link></li>
             <li>&nbsp;</li>
-            <li><Link to="/recordlist" className="btn btn-info">Список записей</Link></li>
+            <li><Link to="/camlist" className="btn btn-info">Список камер</Link></li>
+            <li>&nbsp;</li>
+            <li><Link to="/recordlist" className="btn btn-info">На записи</Link></li>
         </ul>
     </div>;
 }

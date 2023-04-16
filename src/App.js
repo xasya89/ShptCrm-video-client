@@ -12,6 +12,8 @@ import StartRecordPage from './pages/StartRecordPage';
 import CamRecordListPage from './pages/CamListPage';
 import HomePage from './pages/HomePage';
 import IndexPage from './pages/IndexPage';
+import ScreenshotPage from './pages/ScreenshotPage';
+import CameraList from './pages/CameraList';
 
 
 const askPermission = () => {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
           element: <HomePage />
         },
         {
+          path: "camlist",
+          element: <CameraList />
+        },
+        {
           path: "recordlist",
           element: <div><CamRecordListPage /></div>
         },
@@ -60,6 +66,10 @@ const router = createBrowserRouter([
           element:  <div>
               <StartRecordPage />
             </div>,
+        },
+        {
+          path: "screenshot",
+          element: <ScreenshotPage />
         },
       ]
     },
