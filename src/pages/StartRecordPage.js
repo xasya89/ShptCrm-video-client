@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import $api from "../features/api";
 
 function camSelected(cams, setCams, devId){
@@ -59,6 +59,8 @@ const StartRecordPage = () => {
 
     }
 
+    const navigateToActChoose = () => navigate("/actchoose", {state: {parentPage: "/startrecord"}});
+
     let _actNote = <div></div>
     if(choosedAct!=null)
         _actNote = <h3 className="text-md">
@@ -69,13 +71,23 @@ const StartRecordPage = () => {
             <span>{choosedAct.carNum} </span>
         </h3>
 
-    return <div className="flex flex-col gap-4 m-2 justify-center items-conter">
+    return (<>
+        <div className="drop-shadow-lg bg-lime-50 mb-2">
+            <div className="flex flex-row justify-between p-2">
+                <div className="text-lg text-center">
+                    <h3>Начало записи</h3>
+                </div>
+                <Link to="/" className="btn btn-danger">x</Link>
+            </div>
+        </div>
+
+    <div className="flex flex-col gap-4 m-2 justify-center items-conter">
         <div className="card-vertical">
             <div>
-                <h2 className="text-xl">2 - Выберите акт: </h2>
+                <h2 className="text-xl">1 - Выберите акт: </h2>
             </div>
             <div className="text-center my-3">
-                <a href="/actchoose" className="btn btn-info">Выбрать акт</a>
+                <button onClick={navigateToActChoose} className="btn btn-info">Выбрать акт</button>
             </div>
             <div>
                 {_actNote}
@@ -102,6 +114,7 @@ const StartRecordPage = () => {
             <button onClick={()=>startRecord(choosedAct.id, chooseCams)} className="btn btn-info">Начать запись</button>
         </div>
     </div>
+    </>)
 }
 
 export default StartRecordPage;

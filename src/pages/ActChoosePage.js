@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useNavigation, useParams } from "react-router-dom";
 import $api from "../features/api";
 
 const ActChoosePage = () => {
     const [actlist, setActList] = useState([]);
+    const navigate = useNavigate();
+    const {parentPage} = useLocation().state ?? {parentPage:"/"};
     useEffect(() => {
         const selectList = async () => {
             try{
@@ -17,6 +19,8 @@ const ActChoosePage = () => {
         }
         selectList();
     }, []);
+
+    const handleChooseAct = (actId) => navigate(parentPage=="/" ? "/" : `${parentPage}/${actId}`);
     
     return <div className="">
         <div className="sticky top-0 w-full text-right p-2">
@@ -38,7 +42,7 @@ const ActChoosePage = () => {
                     <div>{act.carNum}</div>
                     <div className="col-span-2 text-center">{act.note}</div>
                     <div className="col-span-2 text-center">
-                        <a href={_choosedhref} className="btn btn-info">Выбрать</a>
+                        <button onClick={_=>handleChooseAct(act.id)} className="btn btn-info">Выбрать</button>
                     </div>
                 </div>
             } )}

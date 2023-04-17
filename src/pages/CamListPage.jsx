@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useCallback } from "react";
+import { Link } from "react-router-dom";
 import $api from "../features/api";
 
 async function selectCamStatuses(setStateCams){
@@ -58,22 +59,29 @@ export default function CamRecordListPage() {
 
     return (
         <>
-            <h2>Активные камеры</h2>
+            <div className="drop-shadow-lg bg-lime-50 mb-2">
+                <div className="flex flex-row justify-between p-2">
+                    <div className="text-lg text-center">
+                        <h3>Список записей</h3>
+                    </div>
+                    <Link to="/" className="btn btn-danger">x</Link>
+                </div>
+            </div>
             <div>
-                {cams.filter(c=>c.isRecord).map(cam => {
+                {cams.filter(c=>c.isOnline).map(cam => {
                     let _src = `${process.env.REACT_APP_DVR_HOST}/video.mjpg?oids=${cam.devId}&size=640x480`;
                     if(!cam.isOnline)
                         return <div className="card-vertical">
-                            <h2 className="text-xl text-red-700">Камера недоступна</h2>
+                            <h2 className="text-xl text-red-700">Камера {cam.devId} недоступна</h2>
                         </div>;
                     if(!cam.isOnline & cam.isRecord)
                         return <div className="card-vertical">
-                            <h2 className="text-xl text-red-700">Камера недоступна во время погрузки</h2>
+                            <h2 className="text-xl text-red-700">Камера {cam.devId} недоступна во время записи</h2>
                         </div>;
                     let actRecord= <div></div>;
                     if(cam.isRecord)
                         actRecord = <div className="text-center">
-                            <h2 className="text-xl text-center">Идет запись акта - {cam?.actNum} от {cam?.actDateStr}</h2>
+                            <h2 className="text-xl text-center">Идет запись акта - {cam?.actNum} от {cam?.actDateStr}<br /> Машина {cam?.ActCar} <br/>Водитель {cam?.actFahrer}</h2>
                             <button onClick={() => stopRecord(cam.devId)} className="btn btn-danger mt-2">Остановить</button>
                         </div>;
 

@@ -14,6 +14,7 @@ import HomePage from './pages/HomePage';
 import IndexPage from './pages/IndexPage';
 import ScreenshotPage from './pages/ScreenshotPage';
 import CameraList from './pages/CameraList';
+import UploadPhoto from './pages/UploadPhoto';
 
 
 const askPermission = () => {
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
           element: <HomePage />
         },
         {
+          path: "uploadphoto",
+          element: <UploadPhoto />
+        },
+        {
+          path: "uploadphoto/:actId",
+          element: <UploadPhoto />
+        },
+        {
           path: "camlist",
           element: <CameraList />
         },
@@ -51,6 +60,12 @@ const router = createBrowserRouter([
         },
         {
           path: "actchoose",
+          element:  <div>
+              <ActChoosePage />
+            </div>,
+        },
+        {
+          path: "actchoose/",
           element:  <div>
               <ActChoosePage />
             </div>,
