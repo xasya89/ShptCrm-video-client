@@ -6,11 +6,18 @@ export default function CameraList () {
     const select = useRef();
     const [cams, setCams] = useState([]);
     const [selectCam, setSelectCam] = useState(null);
+    const [isCamLoading, setIsCamLoading] = useState(true);
     useEffect(()=>{
         const getCams = async () => {
-            const resp = await $api.get("/video/CameraStatus");
-            setCams(resp.data.filter(c=>c.isOnline));
-            setSelectCam(resp.data.length>0 ? resp.data[1] : null);
+            try{
+                const resp = await $api.get("/video/CameraStatus");
+                setCams(resp.data.filter(c=>c.isOnline || c.isRecord));
+                setSelectCam(resp.data.length>0 ? resp.data[1] : null);
+            }
+            catch(e){}
+            finally{
+                setIsCamLoading(false);
+            }
         }
         getCams();
     }, []);
@@ -29,13 +36,14 @@ export default function CameraList () {
 
         <label for='camas' className="select-label text-lg text-center block">Выберите камеру</label>
         <select onChange={e=>handleSelect(e.target.value)} value={selectCam?.devId} ref={select} id='cams' className="select">
-            {cams.map(c=><option value={c.devId} key={c.devId}>Касера {c.devId}</option>)}
+            {cams.map(c=><option value={c.devId} key={c.devId}>Камера {c.devId}</option>)}
         </select>
         <div>
+            {isCamLoading && <div>Получение списка камер</div>}
             {selectCam && (
                 <>
                     <img src={`${process.env.REACT_APP_DVR_HOST}/video.mjpg?oids=${selectCam.devId}&size=640x480`} className="object-cover"/>
-                    {selectCam.actNum && (
+                    {selectCam.isRecord && (
                         <h3 className="text-lg text-center">Идет запись<br />Акт {selectCam.ActNum} от {selectCam.actDateStr}</h3>
                     )}
                 </>
