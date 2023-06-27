@@ -12,7 +12,7 @@ export default function CameraList () {
             try{
                 const resp = await $api.get("/video/CameraStatus");
                 setCams(resp.data.filter(c=>c.isOnline || c.isRecord));
-                setSelectCam(resp.data.length>0 ? resp.data[1] : null);
+                setSelectCam(resp.data.length>0 ? resp.data[0] : null);
             }
             catch(e){}
             finally{
